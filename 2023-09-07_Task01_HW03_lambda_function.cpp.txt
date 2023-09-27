@@ -1,0 +1,50 @@
+﻿#include <iostream>
+#include <Windows.h>
+#include <functional>
+#include <algorithm>
+#include <vector>
+#include <cmath>
+
+using namespace std;
+
+constexpr auto PI = 3.14159265358979;
+
+// Создайте вектор из функций std::vector<std::function<void(double)>> functions; и наполняйте его, передавая в push_back lambda-Функции.
+int main()
+{
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
+
+	auto angles = { 30, 60, 90};
+
+	cout << "[Входные данные]: ";
+	for_each(angles.begin(), angles.end(), [angles](double i)
+		{
+			cout << i << " * 3.1415926 / 180, ";
+			//return angles * PI / 180;
+		}
+	);
+	cout << "// перевод из градусов в радианы" << endl;
+
+	for_each(angles.begin(), angles.end(), [](double i) mutable
+		{
+			i *= 3.1415926 / 180;
+		}
+	);
+
+//	function<void(double)>
+	vector<function<void(double)>> functions;
+	functions.push_back([](double angle) { cout << "sin: " << sin(angle * PI / 180) << " "; });
+	functions.push_back([](double angle) { cout << "cos: " << cos(angle * PI / 180) << " "; });
+	functions.push_back([](double angle) { cout << "tan: " << tan(angle * PI / 180) << " "; });
+	cout << "[Выходные данные]: " << endl;
+
+	for (const auto& angle : angles) {
+		std::cout << angle << ": ";
+		for (const auto& function : functions)
+			function(angle);
+		std::cout << std::endl;
+	}
+
+	system("pause");
+}
